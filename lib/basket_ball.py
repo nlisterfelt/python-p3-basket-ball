@@ -182,3 +182,79 @@ def game_dict():
             ]
         }
     }
+
+def find_player_info(player_name, to_find):
+    home = game_dict()['home']['players']
+    away = game_dict()['away']['players']
+    for player_info in home:
+        if(player_info['name']==player_name):
+            index = home.index(player_info)
+            return game_dict()['home']['players'][index][to_find]
+    for player_info in away:
+        if(player_info['name']==player_name):
+            index = away.index(player_info)
+            return game_dict()['away']['players'][index][to_find]
+    return None
+
+def num_points_per_game(player_name):
+    return find_player_info(player_name, 'points_per_game')
+
+#print(num_points_per_game('Bradley Beal'))
+
+def player_age(player_name):
+    return find_player_info(player_name, 'age')
+
+def team_colors(team_name):
+    if(team_name==game_dict()['home']['team_name']):
+        return game_dict()['home']['colors']
+    else:
+        return game_dict()['away']['colors']
+
+#team_colors('Washington Wizards')
+
+def team_names():
+    return [game_dict()['home']['team_name'], game_dict()['away']['team_name']]
+
+def player_numbers(team_name):
+    team = 'home' if team_name == 'Cleveland Cavaliers' else 'away'
+    numbers = []
+    for player in game_dict()[team]['players']:
+        numbers.append(player['number'])
+    return numbers
+
+def player_stats(player_name):
+    home = game_dict()['home']['players']
+    away = game_dict()['away']['players']
+    for player_info in home:
+        if(player_info['name']==player_name):
+            index = home.index(player_info)
+            return game_dict()['home']['players'][index]
+    for player_info in away:
+        if(player_info['name']==player_name):
+            index = away.index(player_info)
+            return game_dict()['away']['players'][index]
+    return None
+
+def average_rebounds_by_shoe_brand():
+    brand_dict = {}
+    home = game_dict()['home']['players']
+    away = game_dict()['away']['players']
+    for player in home:
+        if(player['shoe_brand'] in brand_dict):
+            brand_dict[player['shoe_brand']].append(player['rebounds_per_game'])
+        else: 
+            brand_dict.update({player['shoe_brand']: [player['rebounds_per_game']]})
+    for player in away:
+        if(player['shoe_brand'] in brand_dict):
+            brand_dict[player['shoe_brand']].append(player['rebounds_per_game'])
+        else: 
+            brand_dict.update({player['shoe_brand']: [player['rebounds_per_game']]})
+    for brand in brand_dict:
+        avg = 0
+        for numb in brand_dict[brand]:
+            avg += numb
+        avg /= len(brand_dict[brand])
+        new_avg = '{:.2f}'.format(avg)
+        print(f'{brand}:  {new_avg}')
+
+(average_rebounds_by_shoe_brand())
